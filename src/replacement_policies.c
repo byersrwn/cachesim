@@ -126,9 +126,8 @@ uint32_t rand_eviction_index(struct replacement_policy *replacement_policy,
     // TODO return the index within the set that should be evicted.
     //int x = RAND_MAX - (RAND_MAX % cache_system->associativity);
     //return rand() / (RAND_MAX / (x + 1) + 1);
-    int r = rand();
-    int index = r % cache_system->associativity;
-    return r;
+   
+    return rand() % cache_system->associativity;
 }
 
 void rand_replacement_policy_cleanup(struct replacement_policy *replacement_policy)
