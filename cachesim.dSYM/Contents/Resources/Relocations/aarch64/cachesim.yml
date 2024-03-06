@@ -1,0 +1,25 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     cachesim
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100002A04, symSize: 0x440 }
+  - { offsetInCU: 0x75, offset: 0x75, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100002A04, symSize: 0x440 }
+  - { offsetInCU: 0x26, offset: 0x30F, size: 0x8, addend: 0x0, symName: _cache_system_new, symObjAddr: 0x0, symBinAddr: 0x100002E44, symSize: 0x1DC }
+  - { offsetInCU: 0x81, offset: 0x36A, size: 0x8, addend: 0x0, symName: _cache_system_new, symObjAddr: 0x0, symBinAddr: 0x100002E44, symSize: 0x1DC }
+  - { offsetInCU: 0xFD, offset: 0x3E6, size: 0x8, addend: 0x0, symName: _cache_system_cleanup, symObjAddr: 0x1DC, symBinAddr: 0x100003020, symSize: 0x4C }
+  - { offsetInCU: 0x121, offset: 0x40A, size: 0x8, addend: 0x0, symName: _cache_system_mem_access, symObjAddr: 0x228, symBinAddr: 0x10000306C, symSize: 0x484 }
+  - { offsetInCU: 0x237, offset: 0x520, size: 0x8, addend: 0x0, symName: _cache_system_find_cache_line, symObjAddr: 0x6AC, symBinAddr: 0x1000034F0, symSize: 0xCC }
+  - { offsetInCU: 0x26, offset: 0x732, size: 0x8, addend: 0x0, symName: _lru_cache_access, symObjAddr: 0x0, symBinAddr: 0x1000035BC, symSize: 0x200 }
+  - { offsetInCU: 0x73, offset: 0x77F, size: 0x8, addend: 0x0, symName: _lru_cache_access, symObjAddr: 0x0, symBinAddr: 0x1000035BC, symSize: 0x200 }
+  - { offsetInCU: 0x14D, offset: 0x859, size: 0x8, addend: 0x0, symName: _lru_eviction_index, symObjAddr: 0x200, symBinAddr: 0x1000037BC, symSize: 0x168 }
+  - { offsetInCU: 0x21D, offset: 0x929, size: 0x8, addend: 0x0, symName: _lru_replacement_policy_cleanup, symObjAddr: 0x368, symBinAddr: 0x100003924, symSize: 0x28 }
+  - { offsetInCU: 0x241, offset: 0x94D, size: 0x8, addend: 0x0, symName: _lru_replacement_policy_new, symObjAddr: 0x390, symBinAddr: 0x10000394C, symSize: 0xD4 }
+  - { offsetInCU: 0x2BD, offset: 0x9C9, size: 0x8, addend: 0x0, symName: _rand_cache_access, symObjAddr: 0x464, symBinAddr: 0x100003A20, symSize: 0x1C }
+  - { offsetInCU: 0x30B, offset: 0xA17, size: 0x8, addend: 0x0, symName: _rand_eviction_index, symObjAddr: 0x480, symBinAddr: 0x100003A3C, symSize: 0x4C }
+  - { offsetInCU: 0x36B, offset: 0xA77, size: 0x8, addend: 0x0, symName: _rand_replacement_policy_cleanup, symObjAddr: 0x4CC, symBinAddr: 0x100003A88, symSize: 0x10 }
+  - { offsetInCU: 0x38F, offset: 0xA9B, size: 0x8, addend: 0x0, symName: _rand_replacement_policy_new, symObjAddr: 0x4DC, symBinAddr: 0x100003A98, symSize: 0x6C }
+  - { offsetInCU: 0x3D3, offset: 0xADF, size: 0x8, addend: 0x0, symName: _lru_prefer_clean_cache_access, symObjAddr: 0x548, symBinAddr: 0x100003B04, symSize: 0x1C }
+  - { offsetInCU: 0x421, offset: 0xB2D, size: 0x8, addend: 0x0, symName: _lru_prefer_clean_eviction_index, symObjAddr: 0x564, symBinAddr: 0x100003B20, symSize: 0x1C }
+  - { offsetInCU: 0x465, offset: 0xB71, size: 0x8, addend: 0x0, symName: _lru_prefer_clean_replacement_policy_cleanup, symObjAddr: 0x580, symBinAddr: 0x100003B3C, symSize: 0x10 }
+  - { offsetInCU: 0x489, offset: 0xB95, size: 0x8, addend: 0x0, symName: _lru_prefer_clean_replacement_policy_new, symObjAddr: 0x590, symBinAddr: 0x100003B4C, symSize: 0x60 }
+...
