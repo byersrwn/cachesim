@@ -57,7 +57,6 @@ void cache_system_cleanup(struct cache_system *cache_system)
 
 int cache_system_mem_access(struct cache_system *cache_system, uint32_t address, char rw)
 {
-
     cache_system->stats.accesses++;
 
     uint32_t offset = (address & cache_system->offset_mask);
@@ -118,10 +117,8 @@ int cache_system_mem_access(struct cache_system *cache_system, uint32_t address,
     }
 
     // Let the replacement policy know that the cache line was accessed.
-    printf("Start from cache access\n");
     (*cache_system->replacement_policy->cache_access)(cache_system->replacement_policy,
                                                       cache_system, set_idx, tag);
-    printf("Return from cache access");
 
     // Everything was successful.
     return 0;
@@ -152,11 +149,20 @@ struct cache_line *cache_system_find_cache_line(struct cache_system *cache_syste
     //         return &cache_system->cache_lines[i + set_start];
     //     }
     // }
+
+        // int set_start = set_idx * cache_system->associativity;
+        // struct cache_line *start = &cache_system->cache_lines[set_start];
+        // for (int i = 0; set_start + i <= set_start + cache_system->associativity; i++) {
+        //     struct cache_line *cl = &cache_system->cache_lines[set_start + i + 1];
+        //     if (cl->tag == tag) {
+        //         return cl;
+        //     }
+        // }
         int set_start = set_idx * cache_system->associativity;
         struct cache_line *start = &cache_system->cache_lines[set_start];
-        for (int i = 0; start + i < start + cache_system->associativity; i++) {
+        for (int i = 0; start + i <= start + cache_system->associativity; i++) {
             if ((start + i)->tag == tag) {
-                return start + i;
+                return start;
             }
         }
     

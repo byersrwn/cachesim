@@ -27,12 +27,16 @@ void lru_cache_access(struct replacement_policy *replacement_policy,
     //Either scenario, loop through until you find tag and change it to next highest number.
     
     int set_start = set_idx * cache_system->associativity;
-    struct cache_line *start = &cache_system->cache_lines[set_start];
    
     int highestNum = 0;
     int index = 0;
     int zeroCheck = 0;
     //loop through all entries and find the highest number. OR if there is a 0, put that index with the highest + 1;
+    //printf("masterTable values before access\n");
+    // for(int i = 0 ; i < 8 ; i++){
+    //     printf("%d", *((int *)replacement_policy->data + i ));
+    // }
+    // printf("\n");
 
     for (int i = 0; set_start + i < set_start + cache_system->associativity; i++) {
         if(*((int *)replacement_policy->data + i  + set_start) > highestNum){
@@ -52,11 +56,20 @@ void lru_cache_access(struct replacement_policy *replacement_policy,
     // loop through all entries in a set and find the most recent tag. Change its value in the LRU policy to the highest number + 1.
     // problem: not looping through whole table. Stops with largest value and just changes that slot to the highest number + 1.
     //problem: have duplicate numbers (9s) in set 3
-     for(int i = 0; set_start + i < set_start + cache_system->associativity; i++) {
-        if(cache_system->cache_lines[set_start + i].tag == tag){
-            *((int *)replacement_policy->data + set_start + i) = highestNum + 1;
+
+
+    //  for(int i = 0; set_start + i < set_start + cache_system->associativity; i++) {
+    //     if(cache_system->cache_lines[set_start + i].tag == tag){
+    //         *((int *)replacement_policy->data + set_start + i) = highestNum + 1;
+    //     }
+    // }
+
+        struct cache_line *start = &cache_system->cache_lines[set_start];
+        for (int i = 0; start + i < start + cache_system->associativity; i++) {
+            if((start + i)->tag == tag){   
+                *((int *)replacement_policy->data + set_start + i) = highestNum + 1;                
+            }
         }
-    }
 
 }
 
@@ -64,21 +77,29 @@ uint32_t lru_eviction_index(struct replacement_policy *replacement_policy,
                             struct cache_system *cache_system, uint32_t set_idx)
 {
     // TODO return the index within the set that should be evicted.
-    //give the index of the 0th element in the 
 
     //loop through all of the set and find the element with the smallest number. Return index of that element.
     
     int index = 0;
-    int set_start = set_idx * cache_system->associativity;
+    //int set_start = set_idx * cache_system->associativity;
    // int lowest = *((int *)replacement_policy->data + set_start);
-   int lowest = INT32_MAX;
+    int lowest = 1000000000;
 
-    for (int i = 0; set_start + i < set_start + cache_system->associativity; i++) {
-        if(*((int *) replacement_policy->data + set_start + i) < lowest){
-            lowest = *((int *)replacement_policy->data + i + set_start);
-            index = i;
+    // for (int i = 0; set_start + i < set_start + cache_system->associativity; i++) {
+    //     if(*((int *) replacement_policy->data + set_start + i) < lowest){
+    //         lowest = *((int *)replacement_policy->data + i + set_start);
+    //         index = i;
+    //     }
+    // }
+
+        int set_start = set_idx * cache_system->associativity;
+        struct cache_line *start = &cache_system->cache_lines[set_start];
+        for (int i = 0; start + i < start + cache_system->associativity; i++) {
+            if(*((int *) replacement_policy->data + set_start + i) < lowest){   
+                lowest = *((int *)replacement_policy->data + i + set_start);
+                index = i;
+            }
         }
-    }
     return index;
 }
 
@@ -101,12 +122,17 @@ struct replacement_policy *lru_replacement_policy_new(uint32_t sets, uint32_t as
 
 
     int cache_lines_total = sets * associativity;
-    //printf("cache_lines_total: %d\n", cache_lines_total);
     int* masterTable = calloc(cache_lines_total, sizeof(int));
     for(int i = 0 ; i < cache_lines_total; i++){
         masterTable[i] = 0;
     }
     lru_rp->data = masterTable;
+
+    printf("masterTable values after creation\n");
+    for(int i = 0; i < cache_lines_total; i++){
+       printf( "%d", *((int *)lru_rp->data + i));
+    }
+    printf("\n");
     
     return lru_rp;
 }
@@ -126,9 +152,8 @@ uint32_t rand_eviction_index(struct replacement_policy *replacement_policy,
     // TODO return the index within the set that should be evicted.
     //int x = RAND_MAX - (RAND_MAX % cache_system->associativity);
     //return rand() / (RAND_MAX / (x + 1) + 1);
-    int r = rand();
-    int index = r % cache_system->associativity;
-    return r;
+    
+    return rand() % cache_system->associativity;
 }
 
 void rand_replacement_policy_cleanup(struct replacement_policy *replacement_policy)
