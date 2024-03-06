@@ -23,15 +23,53 @@ void lru_cache_access(struct replacement_policy *replacement_policy,
                       struct cache_system *cache_system, uint32_t set_idx, uint32_t tag)
 {
     // TODO update the LRU replacement policy state given a new memory access
+    //Loop through and find highest number to save it. Then loop through, find the tag and change its position in the LRU policy to the highest number + 1.
+    //Either scenario, loop through until you find tag and change it to next highest number.
+    
+    int set_start = set_idx * cache_system->associativity;
+    struct cache_line *start = &cache_system->cache_lines[set_start];
+   
+    int highestNum = 0;
+    int index = 0;
+    //loop through all entries and find the highest number
+    for (int i = 0; start + i < start + cache_system->associativity; i++) {
+        if((int *)replacement_policy->data + i > highestNum){
+            highestNum = *((int *)replacement_policy->data + i);
+            index = i;
+        }
+    }
+    // loop through all entries in a set and find the most recent tag. Change its value in the LRU policy to the highest number + 1.
+     for(int i = 0; start + i < start + cache_system->associativity; i++) {
+        if((start + i)->tag == tag){
+            *((int *)replacement_policy->data + set_start + i) = highestNum + 1;
+        }
+    }
+
 }
 
 uint32_t lru_eviction_index(struct replacement_policy *replacement_policy,
                             struct cache_system *cache_system, uint32_t set_idx)
 {
     // TODO return the index within the set that should be evicted.
+    //give the index of the 0th element in the 
 
+    //loop through all of the set and find the element with the smallest number. Return index of that element.
+    int lowest = INT32_MAX;
+    int index = 0;
+    int set_start = set_idx * cache_system->associativity;
+    struct cache_line *start = &cache_system->cache_lines[set_start];
+    printf("set_start: %d\n", set_start);
 
-    return 0;
+    for (int i = 0; set_start + i < set_start + cache_system->associativity; i++) {
+        int print = (int) replacement_policy->data + set_start + i;
+        if((int) replacement_policy->data + set_start + i < lowest){
+            printf("%d is print mastertable value\n", print);
+            lowest = replacement_policy->data + i + set_start;
+            index = i;
+        }
+    }
+    printf("LRUindex to remove: %d\n", index);
+    return index;
 }
 
 void lru_replacement_policy_cleanup(struct replacement_policy *replacement_policy)
@@ -47,22 +85,15 @@ struct replacement_policy *lru_replacement_policy_new(uint32_t sets, uint32_t as
     lru_rp->eviction_index = &lru_eviction_index;
     lru_rp->cleanup = &lru_replacement_policy_cleanup;
 
-
-    // int cache_lines_total = sets * associativity;
-    // int total_number_elements = cache_lines_total * 4;
-    // printf("Cache Lines Total: %d\n", cache_lines_total);
-    // printf("Total Number of Elements: %d\n", total_number_elements);
-    // int* masterUsedTable = calloc(cache_lines_total, sizeof(int));
-    // int* masterUsedTableIndex = calloc(total_number_elements, sizeof(int));
-    // for(int i = 0; i < total_number_elements; i++){
-    //     masterUsedTableIndex[i] = 0;
-    // }
-    // for(int i = 0 ; i < cache_lines_total; i++){
-    //     masterUsedTable[i] = 0;
-    // }
-
     // TODO allocate any additional memory to store metadata here and assign to
     //lru_rp->data;
+
+    int cache_lines_total = sets * associativity;
+    int* masterUsedTable = calloc(cache_lines_total, sizeof(int));
+    for(int i = 0 ; i < cache_lines_total; i++){
+        masterUsedTable[i] = 0;
+    }
+    lru_rp->data = masterUsedTable;
 
     return lru_rp;
 }

@@ -66,15 +66,11 @@ void cache_system_cleanup(struct cache_system *cache_system)
 
 int cache_system_mem_access(struct cache_system *cache_system, uint32_t address, char rw)
 {
-
     cache_system->stats.accesses++;
 
     uint32_t offset = (address & cache_system->offset_mask);
     uint32_t set_idx = (address & cache_system->set_index_mask) >> cache_system->offset_bits;
     uint32_t tag = address >> (cache_system->offset_bits + cache_system->index_bits);
-   
-    //printf("BEFORE cache Sys Find\n");
-    //printCache(cache_system);
 
     struct cache_line *cl = cache_system_find_cache_line(cache_system, set_idx, tag);
     if (cl == NULL || cl->status == INVALID) { // cache miss
@@ -118,7 +114,6 @@ int cache_system_mem_access(struct cache_system *cache_system, uint32_t address,
         }
 
         printf("  store cache line with tag 0x%x in set %d index %d\n", tag, set_idx, insert_index);
-        
 
         // Change the tag of the cache line, and set cl to this cache line.
         cl = &cache_system->cache_lines[set_start + insert_index];
