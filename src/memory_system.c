@@ -115,11 +115,8 @@ int cache_system_mem_access(struct cache_system *cache_system, uint32_t address,
     }
 
     // Let the replacement policy know that the cache line was accessed.
-    printf("Start from cache access\n");
     (*cache_system->replacement_policy->cache_access)(cache_system->replacement_policy,
                                                       cache_system, set_idx, tag);
-    printf("Return from cache access");
-
     // Everything was successful.
     return 0;
 }
