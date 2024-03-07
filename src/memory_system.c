@@ -20,12 +20,9 @@ struct cache_system *cache_system_new(uint32_t line_size, uint32_t sets, uint32_
 
     // DONE TODO: calculate the index bits, offset bits and tag bits.
 
-    double associativity_double = (double) associativity;
-    double line_size_double = (double) line_size;
-
-    cs->index_bits = log2(associativity_double);
-    cs->offset_bits = log2(line_size_double);
-    cs->tag_bits = (uint32_t) 32 - cs->index_bits - cs->offset_bits;
+    cs->index_bits = log2(cs->num_sets);
+    cs->offset_bits = log2(cs->line_size);
+    cs->tag_bits = (uint32_t) 32 - (cs->index_bits + cs->offset_bits);
 
     cs->offset_mask = 0xffffffff >> (32 - cs->offset_bits);
     cs->set_index_mask = 0xffffffff >> cs->tag_bits;
@@ -134,24 +131,6 @@ struct cache_line *cache_system_find_cache_line(struct cache_system *cache_syste
     // the given tag. If no such element exists, then return NULL.
 
 
-    // uint32_t startSet = set_idx * cache_system->associativity;
-    // struct cache_line *cl;
-    // uint32_t counter = 0;
-    
-    // while(counter < startSet + cache_system->associativity){
-    //     cl = &cache_system->cache_lines[counter + startSet];
-    //     if(cl->tag == tag) {
-    //         return cl;
-    //     }
-    //     counter = counter + 1;
-    // }
-
-    // int set_start = set_idx * cache_system->associativity;
-    // for(int i = 0 ; i + set_start < set_start + cache_system->associativity; i++){
-    //     if(cache_system->cache_lines[i + set_start].tag == tag){
-    //         return &cache_system->cache_lines[i + set_start];
-    //     }
-    // }
         int set_start = set_idx * cache_system->associativity;
         struct cache_line *start = &cache_system->cache_lines[set_start];
         for (int i = 0; start + i < start + cache_system->associativity; i++) {

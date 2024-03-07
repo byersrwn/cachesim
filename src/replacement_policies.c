@@ -30,25 +30,14 @@ void lru_cache_access(struct replacement_policy *replacement_policy,
     struct cache_line *start = &cache_system->cache_lines[set_start];
    
     int highestNum = 0;
-    int index = 0;
-    int zeroCheck = 0;
     //loop through all entries and find the highest number. OR if there is a 0, put that index with the highest + 1;
 
     for (int i = 0; set_start + i < set_start + cache_system->associativity; i++) {
         if(*((int *)replacement_policy->data + i  + set_start) > highestNum){
-            zeroCheck = 1;
             highestNum = *((int *)replacement_policy->data + i + set_start);
         }
     }
 
-    // if(zeroCheck == 1){
-    //     for(int i = 0; set_start + i < set_start + cache_system->associativity; i++) {
-    //         if(cache_system->cache_lines[set_start + i].tag == tag){
-    //             *((int *)replacement_policy->data + set_start + i) = 1;
-    //             return;
-    //         }
-    //     }
-    // }
     // loop through all entries in a set and find the most recent tag. Change its value in the LRU policy to the highest number + 1.
     // problem: not looping through whole table. Stops with largest value and just changes that slot to the highest number + 1.
     //problem: have duplicate numbers (9s) in set 3
@@ -70,8 +59,7 @@ uint32_t lru_eviction_index(struct replacement_policy *replacement_policy,
     
     int index = 0;
     int set_start = set_idx * cache_system->associativity;
-   // int lowest = *((int *)replacement_policy->data + set_start);
-   int lowest = INT32_MAX;
+    int lowest = INT32_MAX;
 
     for (int i = 0; set_start + i < set_start + cache_system->associativity; i++) {
         if(*((int *) replacement_policy->data + set_start + i) < lowest){
@@ -123,9 +111,7 @@ void rand_cache_access(struct replacement_policy *replacement_policy,
 uint32_t rand_eviction_index(struct replacement_policy *replacement_policy,
                              struct cache_system *cache_system, uint32_t set_idx)
 {
-    // TODO return the index within the set that should be evicted.
-    //int x = RAND_MAX - (RAND_MAX % cache_system->associativity);
-    //return rand() / (RAND_MAX / (x + 1) + 1);
+  
    
     return rand() % cache_system->associativity;
 }
