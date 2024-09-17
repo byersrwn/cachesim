@@ -27,7 +27,6 @@ int main(int argc, char **argv)
     size_t cache_lines = strtol(argv[3], &endptr, 10);
     size_t associativity = strtol(argv[4], &endptr, 10);
 
-    // DONE TODO: calculate the line size and number of sets.
     int line_size  = (int) cache_size / cache_lines;
     int sets = (int) cache_lines / associativity;
 
